@@ -3,13 +3,9 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import 'element-ui/lib/theme-default/index.css'
-import {Radio, Form, Input, Button, FormItem} from 'element-ui'
-Vue.use(Radio)
-Vue.use(Form)
-Vue.use(Input)
-Vue.use(Button)
-Vue.use(FormItem)
+import 'mint-ui/lib/style.css'
+import Mint from 'mint-ui'
+Vue.use(Mint)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

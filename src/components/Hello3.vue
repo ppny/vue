@@ -1,8 +1,6 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <el-radio class="radio" v-model="radio" label="1" @click="change">备选项</el-radio>
-    <el-radio class="radio" v-model="radio" label="2">备选项</el-radio>
   </div>
 </template>
 

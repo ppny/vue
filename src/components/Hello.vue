@@ -1,25 +1,34 @@
 <template>
   <div class="hello">
-    <mt-field label="邮箱" placeholder="请输入邮箱" type="email" v-model="userInfo.email"></mt-field>
+    <mt-field label="邮箱" placeholder="请输入邮箱" type="account" v-model="userInfo.account"></mt-field>
     <mt-field label="密码" placeholder="请输入密码" type="password" v-model="userInfo.password"></mt-field>
     <mt-button type="primary" size="large" @click.native="handleClick">登录</mt-button>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+import md5 from 'blueimp-md5'
+import Router from 'vue-router'
+//import axios from '../utils/http'
 export default {
   name: 'hello',
   data () {
     return {
       userInfo: {
-        password: '666666666666',
-        email: '7868686@qq.com'
+        password: '123456b',
+        account: '2863960448@qq.com'
       }
     }
   },
   methods: {
     handleClick: function () {
-      console.log(this.userInfo)
+      const router = new Router()
+      this.userInfo.password = md5(this.userInfo.password)
+      axios.post('/api/login', this.userInfo).then((res) => {
+          localStorage.setItem("token",res.data.results.token)
+          router.push({path:'./hello2'})
+      })
     }
   }
 }

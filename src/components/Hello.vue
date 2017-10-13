@@ -27,6 +27,7 @@ export default {
       this.userInfo.password = md5(this.userInfo.password)
       axios.post('/api/login', this.userInfo).then((res) => {
           localStorage.setItem("token",res.data.results.token)
+          localStorage.setItem("uid",res.data.results.uid)
           router.push({path:'./hello2'})
       })
     }

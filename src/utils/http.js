@@ -1,57 +1,46 @@
 /**
  * fetch data
- * 可用 axios 代替
  */
 
-import 'whatwg-fetch'
+import axios from 'axios'
 
 class Http {
 
-  get(url, params) { // GET请求
-    url = params ? this.build(url, params) : url
-        //url = this.buildWithToken(url)
-    return this.request(url, {
-      method: 'GET'
+    get(url, params) { // GET请求
+        url = params ? this.build(url, params) : url
+        return this.request(url, {
+            method: 'GET'
         })
-  }
+    }
 
     post(url, body) { // POST请求
         let options = {
             method: 'POST',
         }
-        if (body) options.body = this.build2(body)
         return this.request(url, options)
     }
 
     request(url, options) { // 根请求
         options.headers = this.defaultHeader()
-        options.credentials = 'include'
-        return fetch(url, options)
-        // .then(this.checkStatus)
-        //.then(interceptor)
-        .then(response => response.json())
-        //.catch(err => browserHistory.replace(`/login`))
+        return axios(url, options)
+        .then(response => {
+            console.log(response)
+            return response.data
+        })
+        .catch( err => console.error(url + ":" + err))
     }
-
-    checkStatus(response) {
-        if (response.status >= 200 && response.status < 300) {
-            return response
-        } else {
-            console.error(response)
-            var error = new Error(response.statusText)
-            error.response = response
-            throw error
-        }
-    }
-
 
     defaultHeader() { // 默认头
         let header = {
-            "Content-Type": "application/x-www-form-urlencoded"
-            //'Accept': 'application/json',
-            //'Content-Type': 'application/json'
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer${localStorage.getItem('token')}`,
         };
         return header
+    }
+
+    buildWithToken(url) {
+        return this.build(url, {token: localDb.get('session')})
     }
 
     build(url, params) { // URL构建方法
@@ -59,23 +48,12 @@ class Http {
         if (params) {
             for (var p in params) {
                 if (p) {
-                    ps.push(p + '=' + encodeURIComponent(params[p]));
+                    // ps.push(p + '=' + encodeURIComponent(params[p]));
+                    ps.push(p + '=' + params[p]);
                 }
             }
         }
-        return url + (url.indexOf("?")===-1 ? "?":"&") + ps.join('&')
-    }
-
-    build2(body){
-        var ps = []
-        if (body) {
-            for (var p in body) {
-                if (p) {
-                    ps.push(p + '=' + encodeURIComponent(body[p]));
-                }
-            }
-        }
-        return ps.join('&')
+        return url + "?" + ps.join('&')
     }
 
 }
